@@ -4,6 +4,7 @@ import numpy as np
 
 from moead.scalarizing import tchebyscheff_one
 from moead.variation import variation_sbx_poly
+from moead.metrics import igd
 
 @dataclass
 class MOEADConfig:
@@ -45,7 +46,7 @@ def simple_variation_placeholder(rng: np.random.Generator, x1: np.ndarray, x2: n
     y = y + rng.normal(0.0, sigma, size = y.shape)
     return np.clip(y, xl, xu)
 
-def moead_run(config: MOEADConfig, evaluate_fn, W: np.ndarray, B: np.ndarray, xl: np.ndarray, xu: np.ndarray) -> dict:
+def moead_run(config: MOEADConfig, evaluate_fn, W: np.ndarray, B: np.ndarray, xl: np.ndarray, xu: np.ndarray, reference_Z = None) -> dict:
     rng = np.random.default_rng(config.seed)
 
     N = config.pop_size
@@ -63,6 +64,7 @@ def moead_run(config: MOEADConfig, evaluate_fn, W: np.ndarray, B: np.ndarray, xl
     z = init_ideal_point(F)
 
     history_replaced = []
+    history_igd = []
     for gen in range(config.n_gen):
         replaced_this_gen = 0
         for i in range(N):
@@ -79,5 +81,7 @@ def moead_run(config: MOEADConfig, evaluate_fn, W: np.ndarray, B: np.ndarray, xl
 
             replaced_this_gen += update_neighbors_tchebyscheff(X = X, F = F, y = y, f_y = f_y, W = W, B_i = neigh, z = z, nr = config.nr)
         history_replaced.append(replaced_this_gen)
+        if reference_Z is not None:
+            history_igd.append(igd(F, reference_Z))
     
-    return {"X" : X, "F" : F, "z" : z, "history_replaced" : np.array(history_replaced, dtype = int)}
+    return {"X" : X, "F" : F, "z" : z, "history_replaced" : np.array(history_replaced, dtype = int), "history_igd" : np.array(history_igd, dtype = float) if reference_Z is not None else None}
