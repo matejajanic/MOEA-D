@@ -6,8 +6,10 @@ import matplotlib.pyplot as plt
 from moead.problems.zdt import (
     zdt1,
     zdt2,
+    zdt3,
     sample_true_pareto_front_zdt1,
     sample_true_pareto_front_zdt2,
+    sample_true_pareto_front_zdt3
 )
 from moead.weights import build_weight_setup
 from moead.algorithm import MOEADConfig, moead_run
@@ -46,7 +48,7 @@ def run_mode(mode: str, args, setup, Zref, evaluate_fn):
 def main():
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("--problem", type=str, default="zdt1", choices=["zdt1", "zdt2"])
+    parser.add_argument("--problem", type=str, default="zdt1", choices=["zdt1", "zdt2", "zdt3"])
     parser.add_argument("--N", type=int, default=101)
     parser.add_argument("--T", type=int, default=20)
     parser.add_argument("--n_gen", type=int, default=200)
@@ -67,6 +69,9 @@ def main():
     elif args.problem == "zdt2":
         evaluate_fn = zdt2
         Zref = sample_true_pareto_front_zdt2(500)
+    elif args.problem == "zdt3":
+        evaluate_fn = zdt3
+        Zref = sample_true_pareto_front_zdt3(500)
     else:
         raise ValueError("Unknown problem")
 

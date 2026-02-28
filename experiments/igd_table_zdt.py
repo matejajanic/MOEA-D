@@ -7,8 +7,10 @@ import os
 from moead.problems.zdt import (
     zdt1,
     zdt2,
+    zdt3,
     sample_true_pareto_front_zdt1,
     sample_true_pareto_front_zdt2,
+    sample_true_pareto_front_zdt3
 )
 from moead.weights import build_weight_setup
 from moead.algorithm import MOEADConfig, moead_run
@@ -54,7 +56,7 @@ def mean_std(xs: list[float]) -> tuple[float, float]:
 def main():
     p = argparse.ArgumentParser()
 
-    p.add_argument("--problem", type=str, default="zdt1", choices=["zdt1", "zdt2"])
+    p.add_argument("--problem", type=str, default="zdt1", choices=["zdt1", "zdt2", "zdt3"])
     p.add_argument("--N", type=int, default=101)
     p.add_argument("--T", type=int, default=20)
     p.add_argument("--n_gen", type=int, default=200)
@@ -79,6 +81,10 @@ def main():
         evaluate_fn = zdt2
         Zref = sample_true_pareto_front_zdt2(1000)
         default_csv = "report/igd_zdt2.csv"
+    elif args.problem == "zdt3":
+        evaluate_fn = zdt3
+        Zref = sample_true_pareto_front_zdt3(1000)
+        default_csv = "report/igd_zdt3.csv"
     else:
         raise ValueError("Unknown problem")
 

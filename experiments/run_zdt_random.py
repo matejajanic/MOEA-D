@@ -6,15 +6,17 @@ import matplotlib.pyplot as plt
 from moead.problems.zdt import (
     zdt1,
     zdt2,
+    zdt3,
     sample_true_pareto_front_zdt1,
     sample_true_pareto_front_zdt2,
+    sample_true_pareto_front_zdt3
 )
 
 
 def main() -> None:
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("--problem", type=str, default="zdt1", choices=["zdt1", "zdt2"])
+    parser.add_argument("--problem", type=str, default="zdt1", choices=["zdt1", "zdt2", "zdt3"])
     parser.add_argument("--N", type=int, default=200, help="Population size")
     parser.add_argument("--n", type=int, default=30, help="Decision dimension")
     parser.add_argument("--seed", type=int, default=42)
@@ -31,6 +33,9 @@ def main() -> None:
     elif args.problem == "zdt2":
         evaluate_fn = zdt2
         PF = sample_true_pareto_front_zdt2(300)
+    elif args.problem == "zdt3":
+        evaluate_fn = zdt3
+        PF = sample_true_pareto_front_zdt3(300)
     else:
         raise ValueError("Unknown problem")
 
