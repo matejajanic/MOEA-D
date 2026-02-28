@@ -8,17 +8,19 @@ from moead.problems.zdt import (
     zdt2,
     zdt3,
     zdt4,
+    zdt6,
     sample_true_pareto_front_zdt1,
     sample_true_pareto_front_zdt2,
     sample_true_pareto_front_zdt3,
     sample_true_pareto_front_zdt4,
+    sample_true_pareto_front_zdt6
 )
 from moead.weights import build_weight_setup
 from moead.algorithm import MOEADConfig, moead_run
 
 
 def bounds_for_problem(problem: str, n_var: int):
-    if problem in ("zdt1", "zdt2", "zdt3"):
+    if problem in ("zdt1", "zdt2", "zdt3", "zdt6"):
         xl = np.zeros(n_var)
         xu = np.ones(n_var)
     elif problem == "zdt4":
@@ -49,7 +51,7 @@ def main() -> None:
         "--problem",
         type=str,
         default="zdt1",
-        choices=["zdt1", "zdt2", "zdt3", "zdt4"],
+        choices=["zdt1", "zdt2", "zdt3", "zdt4", "zdt6"]
     )
 
     args = parser.parse_args()
@@ -80,6 +82,9 @@ def main() -> None:
     elif args.problem == "zdt4":
         evaluate_fn = zdt4
         PF = sample_true_pareto_front_zdt4(400)
+    elif args.problem == "zdt6":
+        evaluate_fn = zdt6
+        PF = sample_true_pareto_front_zdt6(400)
     else:
         raise ValueError("Unknown problem.")
 

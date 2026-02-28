@@ -9,17 +9,19 @@ from moead.problems.zdt import (
     zdt2,
     zdt3,
     zdt4,
+    zdt6,
     sample_true_pareto_front_zdt1,
     sample_true_pareto_front_zdt2,
     sample_true_pareto_front_zdt3,
     sample_true_pareto_front_zdt4,
+    sample_true_pareto_front_zdt6
 )
 from moead.weights import build_weight_setup
 from moead.algorithm import MOEADConfig, moead_run
 
 
 def bounds_for_problem(problem: str, n_var: int):
-    if problem in ("zdt1", "zdt2", "zdt3"):
+    if problem in ("zdt1", "zdt2", "zdt3", "zdt6"):
         xl = np.zeros(n_var)
         xu = np.ones(n_var)
     elif problem == "zdt4":
@@ -72,7 +74,7 @@ def main():
     p = argparse.ArgumentParser()
 
     p.add_argument("--problem", type=str, default="zdt1",
-                   choices=["zdt1", "zdt2", "zdt3", "zdt4"])
+                   choices=["zdt1", "zdt2", "zdt3", "zdt4", "zdt6"])
     p.add_argument("--N", type=int, default=101)
     p.add_argument("--T", type=int, default=20)
     p.add_argument("--n_gen", type=int, default=200)
@@ -105,6 +107,10 @@ def main():
         evaluate_fn = zdt4
         Zref = sample_true_pareto_front_zdt4(1000)
         default_csv = "report/igd_zdt4.csv"
+    elif args.problem == "zdt6":
+        evaluate_fn = zdt6
+        Zref = sample_true_pareto_front_zdt6(1000)
+        default_csv = "report/igd_zdt6.csv"
     else:
         raise ValueError("Unknown problem")
 

@@ -8,10 +8,12 @@ from moead.problems.zdt import (
     zdt2,
     zdt3,
     zdt4,
+    zdt6,
     sample_true_pareto_front_zdt1,
     sample_true_pareto_front_zdt2,
     sample_true_pareto_front_zdt3,
     sample_true_pareto_front_zdt4,
+    sample_true_pareto_front_zdt6
 )
 
 
@@ -33,7 +35,7 @@ def main() -> None:
         "--problem",
         type=str,
         default="zdt1",
-        choices=["zdt1", "zdt2", "zdt3", "zdt4"],
+        choices=["zdt1", "zdt2", "zdt3", "zdt4", "zdt6"]
     )
     parser.add_argument("--N", type=int, default=200, help="Population size")
     parser.add_argument("--n", type=int, default=30, help="Decision dimension")
@@ -58,6 +60,9 @@ def main() -> None:
     elif args.problem == "zdt4":
         evaluate_fn = zdt4
         PF = sample_true_pareto_front_zdt4(300)
+    elif args.problem == "zdt6":
+        evaluate_fn = zdt6
+        PF = sample_true_pareto_front_zdt6(300)
     else:
         raise ValueError("Unknown problem")
 

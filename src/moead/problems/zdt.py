@@ -123,3 +123,28 @@ def sample_true_pareto_front_zdt4(num_points: int = 200) -> np.ndarray:
     f1 = np.linspace(0.0, 1.0, num_points)
     f2 = 1.0 - np.sqrt(f1)
     return np.stack([f1, f2], axis=1)
+
+def zdt6(X: np.ndarray) -> np.ndarray:
+    if X.ndim != 2:
+        raise ValueError("X must be a 2D array.")
+    if np.any(X < 0.0) or np.any(X > 1.0):
+        raise ValueError("ZDT6 expects X in [0,1].")
+
+    n = X.shape[1]
+    if n < 2:
+        raise ValueError("ZDT6 typically uses n>=2.")
+
+    x1 = X[:, 0]
+    f1 = 1.0 - np.exp(-4.0 * x1) * (np.sin(6.0 * np.pi * x1) ** 6)
+
+    mean_rest = np.sum(X[:, 1:], axis=1) / (n - 1)
+    g = 1.0 + 9.0 * (mean_rest ** 0.25)
+
+    f2 = g * (1.0 - (f1 / g) ** 2)
+    return np.stack([f1, f2], axis=1)
+
+
+def sample_true_pareto_front_zdt6(num_points: int = 200) -> np.ndarray:
+    f1 = np.linspace(0.0, 1.0, num_points)
+    f2 = 1.0 - f1 ** 2
+    return np.stack([f1, f2], axis=1)
