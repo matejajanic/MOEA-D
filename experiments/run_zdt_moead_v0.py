@@ -7,12 +7,28 @@ from moead.problems.zdt import (
     zdt1,
     zdt2,
     zdt3,
+    zdt4,
     sample_true_pareto_front_zdt1,
     sample_true_pareto_front_zdt2,
-    sample_true_pareto_front_zdt3
+    sample_true_pareto_front_zdt3,
+    sample_true_pareto_front_zdt4,
 )
 from moead.weights import build_weight_setup
 from moead.algorithm import MOEADConfig, moead_run
+
+
+def bounds_for_problem(problem: str, n_var: int):
+    if problem in ("zdt1", "zdt2", "zdt3"):
+        xl = np.zeros(n_var)
+        xu = np.ones(n_var)
+    elif problem == "zdt4":
+        xl = np.full(n_var, -5.0)
+        xu = np.full(n_var, 5.0)
+        xl[0] = 0.0
+        xu[0] = 1.0
+    else:
+        raise ValueError("Unknown problem")
+    return xl, xu
 
 
 def main() -> None:
@@ -33,7 +49,7 @@ def main() -> None:
         "--problem",
         type=str,
         default="zdt1",
-        choices=["zdt1", "zdt2", "zdt3"]
+        choices=["zdt1", "zdt2", "zdt3", "zdt4"],
     )
 
     args = parser.parse_args()
@@ -51,8 +67,6 @@ def main() -> None:
         variation=args.variation,
     )
 
-    xl = np.zeros(args.n_var)
-    xu = np.ones(args.n_var)
 
     if args.problem == "zdt1":
         evaluate_fn = zdt1
@@ -63,8 +77,13 @@ def main() -> None:
     elif args.problem == "zdt3":
         evaluate_fn = zdt3
         PF = sample_true_pareto_front_zdt3(400)
+    elif args.problem == "zdt4":
+        evaluate_fn = zdt4
+        PF = sample_true_pareto_front_zdt4(400)
     else:
         raise ValueError("Unknown problem.")
+
+    xl, xu = bounds_for_problem(args.problem, args.n_var)
 
     out = moead_run(
         cfg,

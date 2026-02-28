@@ -7,12 +7,29 @@ from moead.problems.zdt import (
     zdt1,
     zdt2,
     zdt3,
+    zdt4,
     sample_true_pareto_front_zdt1,
     sample_true_pareto_front_zdt2,
-    sample_true_pareto_front_zdt3
+    sample_true_pareto_front_zdt3,
+    sample_true_pareto_front_zdt4,
 )
 from moead.weights import build_weight_setup
 from moead.algorithm import MOEADConfig, moead_run
+
+
+def bounds_for_problem(problem: str, n_var: int):
+    if problem in ("zdt1", "zdt2", "zdt3"):
+        xl = np.zeros(n_var)
+        xu = np.ones(n_var)
+    elif problem == "zdt4":
+        xl = np.full(n_var, -5.0)
+        xu = np.full(n_var, 5.0)
+        xl[0] = 0.0
+        xu[0] = 1.0
+    else:
+        raise ValueError("Unknown problem")
+    return xl, xu
+
 
 def run_mode(mode: str, args, setup, Zref, evaluate_fn):
     cfg = MOEADConfig(
@@ -30,8 +47,7 @@ def run_mode(mode: str, args, setup, Zref, evaluate_fn):
         variation = mode
     )
 
-    xl = np.zeros(args.n_var)
-    xu = np.ones(args.n_var)
+    xl, xu = bounds_for_problem(args.problem, args.n_var)
 
     out = moead_run(
         cfg,
@@ -48,7 +64,7 @@ def run_mode(mode: str, args, setup, Zref, evaluate_fn):
 def main():
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("--problem", type=str, default="zdt1", choices=["zdt1", "zdt2", "zdt3"])
+    parser.add_argument("--problem", type=str, default="zdt1", choices=["zdt1", "zdt2", "zdt3", "zdt4"])
     parser.add_argument("--N", type=int, default=101)
     parser.add_argument("--T", type=int, default=20)
     parser.add_argument("--n_gen", type=int, default=200)
@@ -72,6 +88,9 @@ def main():
     elif args.problem == "zdt3":
         evaluate_fn = zdt3
         Zref = sample_true_pareto_front_zdt3(500)
+    elif args.problem == "zdt4":
+        evaluate_fn = zdt4
+        Zref = sample_true_pareto_front_zdt4(500)
     else:
         raise ValueError("Unknown problem")
 

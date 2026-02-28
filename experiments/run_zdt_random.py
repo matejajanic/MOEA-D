@@ -7,16 +7,34 @@ from moead.problems.zdt import (
     zdt1,
     zdt2,
     zdt3,
+    zdt4,
     sample_true_pareto_front_zdt1,
     sample_true_pareto_front_zdt2,
-    sample_true_pareto_front_zdt3
+    sample_true_pareto_front_zdt3,
+    sample_true_pareto_front_zdt4,
 )
+
+
+def generate_random_population(problem: str, N: int, n: int, rng):
+    if problem in ("zdt1", "zdt2", "zdt3"):
+        return rng.uniform(0.0, 1.0, size=(N, n))
+    elif problem == "zdt4":
+        X = rng.uniform(-5.0, 5.0, size=(N, n))
+        X[:, 0] = rng.uniform(0.0, 1.0, size=N)
+        return X
+    else:
+        raise ValueError("Unknown problem")
 
 
 def main() -> None:
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("--problem", type=str, default="zdt1", choices=["zdt1", "zdt2", "zdt3"])
+    parser.add_argument(
+        "--problem",
+        type=str,
+        default="zdt1",
+        choices=["zdt1", "zdt2", "zdt3", "zdt4"],
+    )
     parser.add_argument("--N", type=int, default=200, help="Population size")
     parser.add_argument("--n", type=int, default=30, help="Decision dimension")
     parser.add_argument("--seed", type=int, default=42)
@@ -25,7 +43,8 @@ def main() -> None:
     args = parser.parse_args()
 
     rng = np.random.default_rng(args.seed)
-    X = rng.uniform(0.0, 1.0, size=(args.N, args.n))
+
+    X = generate_random_population(args.problem, args.N, args.n, rng)
 
     if args.problem == "zdt1":
         evaluate_fn = zdt1
@@ -36,6 +55,9 @@ def main() -> None:
     elif args.problem == "zdt3":
         evaluate_fn = zdt3
         PF = sample_true_pareto_front_zdt3(300)
+    elif args.problem == "zdt4":
+        evaluate_fn = zdt4
+        PF = sample_true_pareto_front_zdt4(300)
     else:
         raise ValueError("Unknown problem")
 

@@ -93,3 +93,33 @@ def sample_true_pareto_front_zdt3(num_points: int = 500) -> np.ndarray:
 
     f2 = 1.0 - np.sqrt(f1) - f1 * np.sin(10.0 * np.pi * f1)
     return np.stack([f1, f2], axis=1)
+
+def zdt4(X: np.ndarray) -> np.ndarray:
+    if X.ndim != 2:
+        raise ValueError("X must be a 2D array.")
+
+    n = X.shape[1]
+    if n < 2:
+        raise ValueError("ZDT4 typically uses n>=2.")
+
+    # ZDT4 bounds:
+    # x1 in [0,1], xi in [-5,5] for i>=2
+    if np.any(X[:, 0] < 0.0) or np.any(X[:, 0] > 1.0):
+        raise ValueError("ZDT4 expects x1 in [0,1].")
+    if np.any(X[:, 1:] < -5.0) or np.any(X[:, 1:] > 5.0):
+        raise ValueError("ZDT4 expects x_i in [-5,5] for i>=2.")
+
+    f1 = X[:, 0]
+    g = 1.0 + 10.0 * (n - 1) + np.sum(
+        X[:, 1:] ** 2 - 10.0 * np.cos(4.0 * np.pi * X[:, 1:]),
+        axis=1
+    )
+    f2 = g * (1.0 - np.sqrt(f1 / g))
+    return np.stack([f1, f2], axis=1)
+
+
+def sample_true_pareto_front_zdt4(num_points: int = 200) -> np.ndarray:
+    # True PF in objective space is same shape as ZDT1:
+    f1 = np.linspace(0.0, 1.0, num_points)
+    f2 = 1.0 - np.sqrt(f1)
+    return np.stack([f1, f2], axis=1)
