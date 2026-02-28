@@ -1,0 +1,25 @@
+[project]
+name = "moead-from-scratch"
+version = "0.1.0"
+description = "Multi-Objective Evolutionary Algorithm based on Decomposition (MOEA/D) implemented from scratch."
+authors = [
+    { name = "Jovana Brkljac" },
+    { name = "Mateja Janic" }
+]
+readme = "README.md"
+requires-python = ">=3.10"
+
+dependencies = [
+    "numpy",
+    "matplotlib"
+]
+
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
