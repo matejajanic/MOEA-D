@@ -86,13 +86,17 @@ def main():
    
 
     plt.figure(figsize=(7, 5))
-    plt.scatter(F[:, 1], 1 - F[:, 0], s=20)
+    plt.scatter(F[:, 1], 1 - F[:, 0], s=20, label="MOEA/D solutions")
+
+    # Baseline point (all features)
+    plt.scatter([1.0], [baseline_acc], s=80, c="red", marker="X", label="Baseline (100% features)")
+
     plt.xlabel("Fraction of Selected Features")
     plt.ylabel("Accuracy")
     plt.title("Feature Selection – Accuracy vs Model Complexity")
     plt.grid(True, alpha=0.3)
+    plt.legend()
     plt.tight_layout()
-    #plt.savefig("result.png", dpi=300)
     plt.show()
 
 
