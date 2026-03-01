@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 from moead.weights import build_weight_setup
 from moead.algorithm import MOEADConfig, moead_run
-from moead.problems.feature_selection import FeatureSelection
+from problems.feature_selection import FeatureSelection
 
 
 def main():

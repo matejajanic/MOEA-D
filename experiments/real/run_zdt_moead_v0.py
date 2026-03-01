@@ -3,7 +3,7 @@ import argparse
 import numpy as np
 import matplotlib.pyplot as plt
 
-from moead.problems.zdt import (
+from problems.zdt import (
     zdt1,
     zdt2,
     zdt3,

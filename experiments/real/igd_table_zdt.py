@@ -4,7 +4,7 @@ import csv
 import numpy as np
 import os
 
-from moead.problems.zdt import (
+from problems.zdt import (
     zdt1,
     zdt2,
     zdt3,

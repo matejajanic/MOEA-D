@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 from moead.weights import build_weight_setup
 from moead.algorithm import MOEADConfig, moead_run
-from moead.problems.zdt5 import zdt5
+from problems.zdt5 import zdt5
 
 
 def true_pareto_front():
