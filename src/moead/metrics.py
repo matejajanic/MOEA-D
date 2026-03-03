@@ -22,3 +22,53 @@ def igd(A: np.ndarray, Z: np.ndarray) -> float:
 
     min_d = np.sqrt(np.min(d2, axis = 1))
     return float(np.mean(min_d))
+
+def filter_nondominated(A: np.ndarray) -> np.ndarray:
+    """
+    Returns nondominated subset of A (minimization).
+    """
+    A = np.asarray(A, dtype=float)
+    N = A.shape[0]
+    keep = np.ones(N, dtype=bool)
+
+    for i in range(N):
+        if not keep[i]:
+            continue
+        for j in range(N):
+            if i == j:
+                continue
+            if np.all(A[j] <= A[i]) and np.any(A[j] < A[i]):
+                keep[i] = False
+                break
+
+    return A[keep]
+
+def hypervolume_2d(A: np.ndarray, ref_point: tuple[float, float]) -> float:
+    """
+    2D Hypervolume (minimization).
+    A: (N,2) objective points
+    ref_point: (r1, r2)
+    """
+
+    A = np.asarray(A, dtype=float)
+
+    if A.ndim != 2 or A.shape[1] != 2:
+        raise ValueError("A must be (N,2).")
+
+    A = filter_nondominated(A)
+
+    A = A[np.argsort(A[:, 0])]
+
+    hv = 0.0
+    prev_f2 = ref_point[1]
+
+    for f1, f2 in A:
+        width = ref_point[0] - f1
+        height = prev_f2 - f2
+
+        if width > 0 and height > 0:
+            hv += width * height
+
+        prev_f2 = f2
+
+    return float(hv)
