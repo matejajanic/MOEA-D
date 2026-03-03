@@ -7,10 +7,12 @@ def variation_binary(
     x1: np.ndarray,
     x2: np.ndarray,
     p_c: float = 0.9,
-    p_m: float = 0.05,
+    p_m: float | None = None,
 ) -> np.ndarray:
 
     n = x1.shape[0]
+    if p_m is None:
+        p_m = 1.0 / n
 
     if rng.random() < p_c:
         point = rng.integers(1, n)
