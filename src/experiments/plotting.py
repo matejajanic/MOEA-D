@@ -46,9 +46,9 @@ def plot_history(out_dir, history_replaced, history_igd, show_replacements: bool
 
 def plot_2d_front(out_dir: Path | None, F: np.ndarray, Z: np.ndarray | None, title: str) -> None:
     plt.figure()
-    plt.scatter(F[:, 0], F[:, 1], s=12, alpha=0.8, label="Approx (F)")
     if Z is not None and Z.shape[1] == 2:
         plt.scatter(Z[:, 0], Z[:, 1], s=8, alpha=0.5, label="Reference (Z)")
+    plt.scatter(F[:, 0], F[:, 1], s=12, alpha=0.8, label="Approx (F)")
     plt.xlabel("f1")
     plt.ylabel("f2")
     plt.title(title)
