@@ -8,5 +8,8 @@ def get_project_problem(n_projects: int = 100, budget_ratio: float = 0.4, seed: 
         "n_obj": 2,
         "n_var": ps.n_projects,
         "evaluate_fn": ps.evaluate,
+        "analyze_fn": ps.analyze,
         "budget": ps.budget,
+        "n_projects": ps.n_projects,
+        "budget_ratio": budget_ratio,
     }
