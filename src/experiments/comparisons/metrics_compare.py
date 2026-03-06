@@ -35,7 +35,7 @@ def run_metrics_over_seeds(
 
     for s in seeds:
         cfg = replace(base_cfg, seed=s)
-        W, B = build_WB(cfg.n_obj, cfg.pop_size, cfg.T, H=H)
+        W, B = build_WB(cfg.n_obj, cfg.pop_size, cfg.T, H=H, seed=cfg.seed)
         out = run_single(cfg, evaluate_fn, W, B, xl, xu, reference_Z)
 
         igd_final = np.nan
