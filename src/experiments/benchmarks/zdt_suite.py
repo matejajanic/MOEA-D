@@ -11,7 +11,7 @@ from problems.zdt import (
     sample_true_pareto_front_zdt4,
     sample_true_pareto_front_zdt6,
 )
-from problems.zdt5 import zdt5
+from problems.zdt5 import zdt5, sample_true_pareto_front_zdt5
 
 
 def get_zdt(problem: str, n_var: int) -> dict:
@@ -64,7 +64,7 @@ def get_zdt(problem: str, n_var: int) -> dict:
             "evaluate_fn": zdt5,
             "xl": None,
             "xu": None,
-            "reference_Z": None,  
+            "reference_Z": sample_true_pareto_front_zdt5(),  # usually not provided for ZDT5 here
         }
     if problem == "zdt6":
         return {

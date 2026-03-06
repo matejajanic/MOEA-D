@@ -35,3 +35,15 @@ def zdt5(X: np.ndarray) -> np.ndarray:
     f2 = g / f1
 
     return np.column_stack([f1, f2])
+
+def sample_true_pareto_front_zdt5() -> np.ndarray:
+    """
+    True Pareto front for the standard ZDT5 definition used here:
+      - 1st block length 30 -> f1 in {1..31}
+      - 10 blocks length 5 -> g_min = 10 (all blocks are all-ones)
+    PF points: (f1, 10/f1)
+    Returns shape (31, 2).
+    """
+    f1 = np.arange(1, 32, dtype=float)   # 1..31
+    f2 = 10.0 / f1
+    return np.column_stack([f1, f2])
