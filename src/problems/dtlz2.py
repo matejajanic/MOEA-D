@@ -10,7 +10,6 @@ def dtlz2(x: np.ndarray, M: int = 3) -> np.ndarray:
     """
     x = np.asarray(x, dtype=float)
 
-    # --- batch mode ---
     if x.ndim == 2:
         N, n = x.shape
         if n < M:
@@ -28,7 +27,6 @@ def dtlz2(x: np.ndarray, M: int = 3) -> np.ndarray:
             F[:, m] = val
         return F
 
-    # --- single solution mode ---
     if x.ndim == 1:
         n = x.shape[0]
         if n < M:

@@ -16,12 +16,10 @@ class FeatureSelection:
 
         self.n_features = X.shape[1]
 
-        # Train-test split
         X_train, X_test, y_train, y_test = train_test_split(
             X, y, test_size=0.3, random_state=seed
         )
 
-        # Scaling
         scaler = StandardScaler()
         self.X_train = scaler.fit_transform(X_train)
         self.X_test = scaler.transform(X_test)
@@ -41,7 +39,6 @@ class FeatureSelection:
 
         for x in X_bin:
 
-            # If no features selected, worst possible solution
             if np.sum(x) == 0:
                 F.append([1.0, 1.0])
                 continue

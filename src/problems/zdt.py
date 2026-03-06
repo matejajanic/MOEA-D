@@ -8,12 +8,10 @@ def zdt1(X: np.ndarray) -> np.ndarray:
         raise ValueError("ZDT1 expects X in [0,1].")
     
     f1 = X[:, 0]
-    # g(x) = 1 + 9/(n-1) * sum_{i=2..n} x_i
     n = X.shape[1]
     if n < 2:
         raise ValueError("ZDT1 typically uses n>=2.")
     g = 1.0 + 9.0 * np.sum(X[:, 1:], axis = 1) / (n - 1)
-    # f2 = g * (1 - sqrt(f1/g))
     f2 = g * (1.0 - np.sqrt(f1 / g))
     return np.stack([f1, f2], axis = 1)
 
@@ -33,10 +31,8 @@ def zdt2(X: np.ndarray) -> np.ndarray:
     if n < 2:
         raise ValueError("ZDT2 typically uses n>=2.")
     
-    # g(x) = 1 + 9/(n-1) * sum_{i=2..n} x_i
     g = 1.0 + 9.0 * np.sum(X[:, 1:], axis=1) / (n - 1)
     
-    # f2 = g * (1 - (f1/g)^2)
     f2 = g * (1.0 - (f1 / g) ** 2)
     
     return np.stack([f1, f2], axis=1)
@@ -69,7 +65,6 @@ def sample_true_pareto_front_zdt3(num_points: int = 500) -> np.ndarray:
     ZDT3 true Pareto front is disconnected (5 regions).
     We sample f1 only from the known intervals and compute f2 for g=1.
     """
-    # Known f1 intervals for the Pareto-optimal front
     intervals = [
         (0.0, 0.0830015349),
         (0.1822287280, 0.2577623634),
@@ -78,7 +73,6 @@ def sample_true_pareto_front_zdt3(num_points: int = 500) -> np.ndarray:
         (0.8233317983, 0.8518328654)
     ]
 
-    # distribute points roughly evenly across intervals
     per = max(2, num_points // len(intervals))
     f1_list = []
     for a, b in intervals:
@@ -102,8 +96,6 @@ def zdt4(X: np.ndarray) -> np.ndarray:
     if n < 2:
         raise ValueError("ZDT4 typically uses n>=2.")
 
-    # ZDT4 bounds:
-    # x1 in [0,1], xi in [-5,5] for i>=2
     if np.any(X[:, 0] < 0.0) or np.any(X[:, 0] > 1.0):
         raise ValueError("ZDT4 expects x1 in [0,1].")
     if np.any(X[:, 1:] < -5.0) or np.any(X[:, 1:] > 5.0):
@@ -119,7 +111,6 @@ def zdt4(X: np.ndarray) -> np.ndarray:
 
 
 def sample_true_pareto_front_zdt4(num_points: int = 200) -> np.ndarray:
-    # True PF in objective space is same shape as ZDT1:
     f1 = np.linspace(0.0, 1.0, num_points)
     f2 = 1.0 - np.sqrt(f1)
     return np.stack([f1, f2], axis=1)

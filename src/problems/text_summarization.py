@@ -76,11 +76,11 @@ class TextSummarization:
         if idx.size < 2:
             return 0.0
 
-        V = self.sent_vecs[idx]  # (k, d)
+        V = self.sent_vecs[idx] 
         norms = np.linalg.norm(V, axis=1, keepdims=True)
         norms = np.maximum(norms, 1e-12)
         U = V / norms
-        S = U @ U.T  # cosine similarity matrix
+        S = U @ U.T  
         k = idx.size
         triu = np.triu_indices(k, k=1)
         return float(np.mean(S[triu]))
@@ -93,7 +93,7 @@ class TextSummarization:
             return 0.0
         if k <= self.max_k:
             return 0.0
-        overflow = (k - self.max_k) / float(self.n_sent)  # typically in (0,1]
+        overflow = (k - self.max_k) / float(self.n_sent)  
         return overflow
 
     def evaluate(self, X_bin: np.ndarray) -> np.ndarray:

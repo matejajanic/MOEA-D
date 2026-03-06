@@ -17,7 +17,6 @@ def sbx_crossover(rng: np.random.Generator, p1: np.ndarray, p2: np.ndarray, xl: 
 
                 u = rng.random()
 
-                #child 1
                 beta = 1.0 + (2.0 * (x1 - xl[i]) / (x2 - x1))
                 alpha = 2.0 - beta ** (-(eta_c + 1.0))
                 if u <= 1.0 / alpha:
@@ -26,7 +25,7 @@ def sbx_crossover(rng: np.random.Generator, p1: np.ndarray, p2: np.ndarray, xl: 
                     betaq = (1.0 / (2.0 - u * alpha)) ** (1.0 / (eta_c + 1.0))
                 child1 = 0.5 * ((x1 + x2) - betaq * (x2 - x1))
 
-                #child 2
+                
                 beta = 1.0 + (2.0 * (xu[i] - x2) / (x2 - x1))
                 alpha = 2.0 - beta ** (-(eta_c + 1.0))
                 if u <= 1.0 / alpha:

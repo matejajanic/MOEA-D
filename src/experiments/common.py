@@ -103,6 +103,6 @@ def hv_ref_point_global_2d(F_list: list[np.ndarray], pad: float = 0.1) -> tuple[
         all_nd.append(nd)
 
     A = np.vstack(all_nd)
-    worst = np.max(A, axis=0)  # since minimization, ref point must be worse/larger than all points
+    worst = np.max(A, axis=0)  
     ref = (float(worst[0] * (1.0 + pad)), float(worst[1] * (1.0 + pad)))
     return ref

@@ -10,8 +10,6 @@ class ProjectSelection:
 
         self.n_projects = n_projects
 
-        # Realistic correlated data:
-        # Higher profit tends to have higher cost and risk
         self.profit = rng.integers(10, 100, size=n_projects)
         self.cost = self.profit + rng.integers(5, 30, size=n_projects)
         self.risk = self.profit / 100 + rng.uniform(0, 0.2, size=n_projects)

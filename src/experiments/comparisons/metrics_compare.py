@@ -30,7 +30,6 @@ def run_metrics_over_seeds(
       - uses ONE shared reference point across seeds (fair).
     """
 
-    # First pass: run all seeds and store minimal needed outputs
     runs: list[dict] = []
     F_list: list[np.ndarray] = []
 
@@ -46,19 +45,17 @@ def run_metrics_over_seeds(
         row = {
             "seed": int(s),
             "igd_final": float(igd_final),
-            "F": out["F"],  # used for HV (and potential debugging)
+            "F": out["F"],  
         }
         runs.append(row)
 
         if out["F"].shape[1] == 2:
             F_list.append(out["F"])
 
-    # Shared HV ref point (only if 2D)
     hv_ref = None
     if F_list:
         hv_ref = hv_ref_point_global_2d(F_list, pad=hv_pad)
 
-    # Second pass: compute HV per seed if applicable
     rows: list[dict] = []
     for r in runs:
         hv = np.nan
@@ -66,7 +63,7 @@ def run_metrics_over_seeds(
             hv = float(compute_2d_hv(r["F"], hv_ref))
         rows.append({"seed": r["seed"], "igd_final": r["igd_final"], "hv": hv})
 
-    # Summary
+   
     igd_vals = np.array([x["igd_final"] for x in rows], dtype=float)
     hv_vals = np.array([x["hv"] for x in rows], dtype=float)
 
@@ -76,10 +73,9 @@ def run_metrics_over_seeds(
         "igd_std": float(np.nanstd(igd_vals)),
         "hv_mean": float(np.nanmean(hv_vals)),
         "hv_std": float(np.nanstd(hv_vals)),
-        "hv_ref_point": hv_ref,  # None if not computed
+        "hv_ref_point": hv_ref,  
     }
 
-    # Optional saving
     if save_dir is not None:
         save_dir.mkdir(parents=True, exist_ok=True)
         arr = np.array([[x["seed"], x["igd_final"], x["hv"]] for x in rows], dtype=float)

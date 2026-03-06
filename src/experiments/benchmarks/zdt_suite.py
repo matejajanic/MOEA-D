@@ -47,7 +47,6 @@ def get_zdt(problem: str, n_var: int) -> dict:
             "reference_Z": sample_true_pareto_front_zdt3(500),
         }
     if problem == "zdt4":
-        # bounds: x1 in [0,1], others in [-5,5]
         xl = np.full(n_var, -5.0)
         xu = np.full(n_var, 5.0)
         xl[0] = 0.0
@@ -60,13 +59,12 @@ def get_zdt(problem: str, n_var: int) -> dict:
             "reference_Z": sample_true_pareto_front_zdt4(400),
         }
     if problem == "zdt5":
-        # binary 80 bits fixed
         return {
             "n_obj": 2,
             "evaluate_fn": zdt5,
             "xl": None,
             "xu": None,
-            "reference_Z": None,  # usually not provided for ZDT5 here
+            "reference_Z": None,  
         }
     if problem == "zdt6":
         return {

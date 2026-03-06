@@ -17,18 +17,14 @@ class MOEADConfig:
     seed: int = 42
     nr: int = 2
 
-    # encoding: "real" (SBX/poly / placeholder) or "binary" (uniform crossover + bit-flip)
     encoding: str = "real"
 
-    # real-coded params
     eta_c: float = 20.0
     eta_m: float = 20.0
 
-    # common params (also used for binary crossover prob; p_m used as bit-flip prob in binary)
     p_c: float = 1.0
     p_m: float | None = None
 
-    # for real-coded only: "placeholder" or "sbx"
     variation: str = "sbx"
 
 
@@ -93,7 +89,6 @@ def moead_run(
     if B.shape[0] != N:
         raise ValueError("B must have pop_size rows.")
 
-    # --- init population ---
     if config.encoding == "real":
         if xl is None or xu is None:
             raise ValueError("Real encoding requires xl and xu.")
@@ -104,7 +99,6 @@ def moead_run(
         X = xl[None, :] + X * (xu - xl)[None, :]
 
     elif config.encoding == "binary":
-        # binary population in {0,1}^n
         X = rng.integers(0, 2, size=(N, config.n_var), dtype=int)
 
     else:
@@ -123,7 +117,6 @@ def moead_run(
             neigh = B[i]
             k, l = rng.choice(neigh, size = 2, replace = False) if len(neigh) >= 2 else (i, i)
 
-            # --- variation ---
             if config.encoding == "real":
                 if xl is None or xu is None:
                     raise ValueError("Real encoding requires xl and xu.")
@@ -146,7 +139,6 @@ def moead_run(
                     raise ValueError(f"Unknown variation mode: {config.variation}")
 
             elif config.encoding == "binary":
-                # uniform crossover + bit-flip mutation
                 y = variation_binary(
                     rng,
                     X[k],

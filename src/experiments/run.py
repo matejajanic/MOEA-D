@@ -269,9 +269,8 @@ def main() -> None:
                 if extra.get("max_k") is not None:
                     print(f"max_comp={extra.get('max_comp')} => max_k={extra.get('max_k')}")
 
-        viz_out = run_dir  # None -> show()
+        viz_out = run_dir  
 
-        # -------- visualization --------
         if suite == "realworld" and prob in ["feature", "feature_selection"]:
             plot_feature_accuracy_vs_k(
                 viz_out,
@@ -296,7 +295,6 @@ def main() -> None:
         elif suite == "realworld" and prob in ["textsum", "summarization", "text_summarization"]:
             analysis = analyze_fn(out["X"]) if analyze_fn is not None else None
             if analysis is not None:
-                # 3D (optional) + 2D projections
                 try:
                     plot_textsum_3d(viz_out, analysis, out["F"], title="Text summarization")
                 except Exception:

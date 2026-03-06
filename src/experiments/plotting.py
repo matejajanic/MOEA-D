@@ -140,7 +140,6 @@ def plot_project_tradeoff(
     plt.legend()
     _finalize_figure(out_dir, "project_profit_vs_risk.png")
 
-    # Optional: #projects vs profit (helps intuition)
     if "k" in analysis:
         k = np.asarray(analysis["k"], dtype=int)
         plt.figure()
@@ -174,7 +173,6 @@ def plot_textsum_similarity_vs_compression(
     plt.legend()
     _finalize_figure(out_dir, "textsum_similarity_vs_compression.png")
 
-    # Optional: best similarity per k
     if k.size > 0:
         plt.figure()
         kmax = int(np.max(k))
@@ -275,10 +273,8 @@ def plot_textsum_3d(out_dir, analysis: dict, F: np.ndarray, title: str) -> None:
 
     F = np.asarray(F, dtype=float)
 
-    # --- Pareto mask ---
     F_nd = filter_nondominated(F)
 
-    # mark which rows are nondominated
     nd_mask = np.zeros(F.shape[0], dtype=bool)
     for i in range(F.shape[0]):
         for f in F_nd:
@@ -289,7 +285,6 @@ def plot_textsum_3d(out_dir, analysis: dict, F: np.ndarray, title: str) -> None:
     fig = plt.figure()
     ax = fig.add_subplot(111, projection="3d")
 
-    # all solutions
     ax.scatter(
         comp[~nd_mask],
         red[~nd_mask],
@@ -299,7 +294,6 @@ def plot_textsum_3d(out_dir, analysis: dict, F: np.ndarray, title: str) -> None:
         label="Dominated",
     )
 
-    # Pareto front (orange)
     ax.scatter(
         comp[nd_mask],
         red[nd_mask],
