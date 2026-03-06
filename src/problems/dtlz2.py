@@ -48,14 +48,31 @@ def dtlz2(x: np.ndarray, M: int = 3) -> np.ndarray:
     raise ValueError("x must be 1D or 2D array.")
 
 
-def sample_true_pareto_front_dtlz2(M: int = 3, K: int = 2000, rng: np.random.Generator | None = None) -> np.ndarray:
+import numpy as np
+
+def sample_true_pareto_front_dtlz2(
+    M: int = 3,
+    K: int = 2000,
+    rng: np.random.Generator | None = None
+) -> np.ndarray:
     """
-    Sample reference points on the true Pareto front of DTLZ2 (g=0):
-    Returns Z shape (K, M).
+    Sample reference points uniformly on the true Pareto front of DTLZ2 (g=0).
+    The PF is the positive-orthant part of the unit hypersphere in R^M:
+        sum_i f_i^2 = 1,  f_i >= 0.
+
+    Returns:
+        Z shape (K, M)
     """
+    if M < 2:
+        raise ValueError("M must be >= 2.")
+    if K < 1:
+        raise ValueError("K must be >= 1.")
     if rng is None:
         rng = np.random.default_rng(0)
-    Z = rng.random((K, M))
+
+    Z = rng.normal(size=(K, M))
+    Z = np.abs(Z)
     norms = np.linalg.norm(Z, axis=1, keepdims=True)
+    norms = np.where(norms == 0.0, 1.0, norms)
     Z = Z / norms
     return Z
